@@ -1,0 +1,52 @@
+static def getTime(){
+    return new Date().format("yyyyMMddHHmmss");
+}
+
+group 'jarslink-thing'
+version getTime()
+
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    mavenCentral()
+}
+
+dependencies {
+    compile("com.alipay.jarslink:jarslink-api:1.5.0.20180213") {
+        exclude group: 'org.springframework'
+    }
+    compile 'org.springframework:spring-aop:5.0.5.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-tomcat:2.0.1.RELEASE'
+}
+
+//以下目录不打包到目标jar文件中
+sourceSets {
+    main {
+        resources {
+            exclude 'job'
+            exclude 'bin'
+        }
+    }
+}
+
+//除了生成目标jar包外，额外生成源码包，内部库或者开源库要添加这项，便于使用者查看源码
+task sourcesJar(type: Jar, dependsOn: classes, description: 'Creates a jar from the source files.') {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': ''
+    }
+}
+
+
+
+

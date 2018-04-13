@@ -1,0 +1,4 @@
+rootProject.name = 'jarslink-thing'
+include 'link-master'
+include 'link-module'
+
